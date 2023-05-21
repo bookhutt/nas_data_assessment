@@ -14,7 +14,11 @@ Engineering Assessment - Data Import , Analysis, &amp; Comparison
 - Create visualization and written materials for presentation
 
 # Error tracking
-Initial data import encountered problems with census_tract_data for 2015 or 2017, likely due to censustract/tractid values counted as an integer rather than a uuid or string. There's a significant number of counties with multiple null values in csv source files. 0 values in some cases, such as the case for Yuma, Arizona listed as having a population of 0 in 2015 for several of the census tracts. This is imporant to keep in mind and will require consideration for aggregate functions. 1291 uploaded of some odd 74002 in the initial insert of rows represents unaccaptable data loss.
+Initial data import encountered problems with census_tract_data for 2015 or 2017, likely due to censustract/tractid values counted as an integer rather than a uuid or string. Quick solve by reassigning id fields to BIGINT
+
+There's a significant number of counties with multiple null values in csv source files. 0 values in some cases, such as the case for Yuma, Arizona listed as having a population of 0 in 2015 for several of the census tracts. This is imporant to keep in mind and will require consideration for aggregate functions.  
+
+1291 uploaded of some odd 74002 in the initial insert of rows represents unaccaptable data loss.
 
 # Data Quality Issues
 for census_tract_data there's a couple column name issues of concern
@@ -37,3 +41,20 @@ Handleing of special characters in source csv files uneven at best, if county le
 
 Example:
 AÃ±asco or MayagÃ¼ez counties, Puerto Rico
+
+# General Observations
+covid19_state seems to be a fairly comprehensive, if general summation of census data and Covid 19 information (testing, deaths, etc)
+
+A quick look at the data therin can be used to make some interesting observations such as pollution levels per state. The following examples are three or more standard deviations (1.457) from the mean pollution score (7.413)
+*state* |  *pollution*
+--- | --- 
+Arizona | 9.7
+California | 12.8
+DC | 9.8
+Illinois | 9.3
+Nevada | 9.0
+Pennsylvania | 9.2
+
+
+
+
