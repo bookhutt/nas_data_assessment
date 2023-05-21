@@ -13,3 +13,5 @@ Engineering Assessment - Data Import , Analysis, &amp; Comparison
 - document process
 - Create visualization and written materials for presentation
 
+# Error tracking
+Initial data import encountered problems with census_tract_data for 2015 or 2017, likely due to null values in csv source files. 1291 of some odd 74002 rows represents unaccaptable data loss.
