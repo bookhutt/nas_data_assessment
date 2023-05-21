@@ -24,4 +24,9 @@ for census_tract_data there's a couple column name issues of concern
 1 | censustract | tractid
 13 | citizen | votingagecitizen
 
+Markdown | Less | Pretty
+--- | --- | ---
+*Still* | `renders` | **nicely**
+1 | 2 | 3
+
 We can reasonably assume, but not be certain that these columns are analogous to eachother, but without the ability to confirm from source we must err on the side of caution on not rely on them for any analytic purpose.
