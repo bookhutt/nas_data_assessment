@@ -39,10 +39,10 @@ We can reasonably assume, but not be certain that these columns are analogous to
 
 ex:
 ```
-select * from acs2017_census_tract_data a
-left join acs2015_census_tract_data b
+SELECT * FROM acs2017_census_tract_data a
+LEFT JOIN acs2015_census_tract_data b
 ON a.tractid = b.censustract
-WHERE b.censustract is null;
+WHERE b.censustract IS NULL;
 ```
 returns no values, nor does it's inversion.
 
@@ -61,8 +61,24 @@ California | 12.8
 
 California in this case is a true outlier either as a result of genuinly high pollution levels, or due to how this data was collected. Some cursory research suggests that the former is the case.
 
-Looking in a similar fashion at variables in the county_data csv source files we can
+This example is derived from a view combining the 2017 county data and covid 19 state data. Saved here as state_summary_cp.
 
+*state* |  *avg_mean_commute*
+--- | --- 
+Alaska | 11.2
+
+```
+CREATE VIEW state_summary_cp AS
+SELECT
+    c.state,
+    avg(c.childpoverty) AS avg_child_poverty,
+    avg(c.meancommute) AS avg_mean_commute,
+    s.population,
+    s.infected
+FROM acs2017_county_data c
+JOIN covid_19_state s ON c.state = s.state
+GROUP BY c.state, s.population, s.infected;
+```
 
 
 
