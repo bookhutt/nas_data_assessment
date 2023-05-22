@@ -35,7 +35,16 @@ county_data
 1 | censusid | countyid
 13 | citizen | votingagecitizen
 
-We can reasonably assume, but not be certain that these columns are analogous to each other, but without the ability to confirm from source we must err on the side of caution on not rely on them for any analytic purpose until the underlying disparity can be addressed.
+We can reasonably assume, but not be certain that these columns are analogous to each other, but without the ability to confirm from source we must err on the side of caution on not rely on them for any analytic purpose until the underlying disparity can be addressed. This is probably a non-issue given the fact that there do not appear to be any cases where, for example, a censustract value exists without a cooresponding tractid value.
+
+ex:
+```
+select * from acs2017_census_tract_data a
+left join acs2015_census_tract_data b
+ON a.tractid = b.censustract
+WHERE b.censustract is null;
+```
+returns no values, nor does it's inversion.
 
 Handleing of special characters in source csv files uneven at best, if county level analysis neccesarry a detailed CASE statement ought to be used to correct. Does not seem to be an issue once data is inserted
 
@@ -48,12 +57,11 @@ covid19_state seems to be a fairly comprehensive, if general summation of census
 A quick look at the data therin can be used to make some interesting observations such as pollution levels per state. The following examples are three or more standard deviations (1.457) from the mean pollution score (7.413)
 *state* |  *pollution*
 --- | --- 
-Arizona | 9.7
 California | 12.8
-DC | 9.8
-Illinois | 9.3
-Nevada | 9.0
-Pennsylvania | 9.2
+
+California in this case is a true outlier either as a result of genuinly high pollution levels, or due to how this data was collected. Some cursory research suggests that the former is the case.
+
+Looking in a similar fashion at variables in the county_data csv source files we can
 
 
 
