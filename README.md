@@ -59,7 +59,7 @@ A quick look at the data therin can be used to make some interesting observation
 --- | --- 
 California | 12.8
 
-California in this case is a true outlier either as a result of genuinly high pollution levels, or due to how this data was collected. Some cursory research suggests that the former is the case.
+California in this case is a true outlier either as a result of genuinely high pollution levels, or due to how this data was collected. Some cursory research suggests that the former is the case.
 
 This example is derived from a view combining the 2017 county data and covid 19 state data. Saved here as state_summary_cp.
 
@@ -79,6 +79,35 @@ FROM acs2017_county_data c
 JOIN covid_19_state s ON c.state = s.state
 GROUP BY c.state, s.population, s.infected;
 ```
+# Population Comparison
 
+A helpful view for side-by-side comparisons
+```
+CREATE VIEW state_population_comparison AS
+SELECT state,
+       SUM(population) AS covid_19_state_population,
+       (SELECT SUM(totalpop) FROM acs2015_county_data WHERE acs2015_county_data.state = covid_19_state.state) AS county_population_2015,
+       (SELECT SUM(totalpop) FROM acs2017_county_data WHERE acs2017_county_data.state = covid_19_state.state) AS county_population_2017,
+       (SELECT SUM(totalpop) FROM acs2015_census_tract_data WHERE acs2015_census_tract_data.state = covid_19_state.state) AS tract_population_2015,
+       (SELECT SUM(totalpop) FROM acs2017_census_tract_data WHERE acs2017_census_tract_data.state = covid_19_state.state) AS tract_population_2017
+FROM covid_19_state
+GROUP BY state;
+```
 
+It seems that the population sums grouped by state from both the tracts and county sources are equal in all cases and hence can be thought of as two, rather than four points of comparison. The following query returns no results. 
+
+```
+WITH cte AS (
+  SELECT state,
+         (county_population_2015 + tract_population_2015)/2 AS avg_population_2015,
+         (county_population_2017 + tract_population_2017)/2 AS avg_population_2017,
+         county_population_2015,
+         county_population_2017
+  FROM state_population_comparison
+)
+SELECT *
+FROM cte
+WHERE avg_population_2015 <> county_population_2015
+   OR avg_population_2017 <> county_population_2017;
+```
 
