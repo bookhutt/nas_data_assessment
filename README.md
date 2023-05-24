@@ -125,3 +125,4 @@ SELECT state,
        (population_2020 - population_2015) AS total_population_change
 FROM cte;
 ```
+![first look](top_bottom_compare.jpg)
