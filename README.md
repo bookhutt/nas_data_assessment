@@ -110,4 +110,18 @@ FROM cte
 WHERE avg_population_2015 <> county_population_2015
    OR avg_population_2017 <> county_population_2017;
 ```
-
+FROM queries like the following, we can see general trends like population growth (or loss) over time
+```
+WITH cte AS (
+  SELECT state,
+         (county_population_2015) AS population_2015,
+         (county_population_2017) AS population_2017,
+         (covid_19_state_population) as population_2020
+  FROM state_population_comparison
+)
+SELECT state,
+       (population_2017 - population_2015) AS population_change_2017,
+       (population_2020 - population_2017) AS population_change_2020,
+       (population_2020 - population_2015) AS total_population_change
+FROM cte;
+```
